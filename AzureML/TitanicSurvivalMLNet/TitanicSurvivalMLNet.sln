@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2047
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TitanicSurvivalMLNet", "TitanicSurvivalMLNet\TitanicSurvivalMLNet.csproj", "{BCBF4A7D-4BF3-4117-90D6-766AACF6C51B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BCBF4A7D-4BF3-4117-90D6-766AACF6C51B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCBF4A7D-4BF3-4117-90D6-766AACF6C51B}.Debug|x64.ActiveCfg = Debug|x64
+		{BCBF4A7D-4BF3-4117-90D6-766AACF6C51B}.Debug|x64.Build.0 = Debug|x64
+		{BCBF4A7D-4BF3-4117-90D6-766AACF6C51B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCBF4A7D-4BF3-4117-90D6-766AACF6C51B}.Release|x64.ActiveCfg = Release|x64
+		{BCBF4A7D-4BF3-4117-90D6-766AACF6C51B}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {08FE624A-FD5F-4E2B-B815-D5F3E05F608A}
+	EndGlobalSection
+EndGlobal
