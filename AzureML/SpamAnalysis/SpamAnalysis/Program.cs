@@ -34,14 +34,11 @@ namespace SpamAnalysis
         {
             Task.Run(async () =>
             {
-                // Get a model trained to use for evaluation
                 Console.WriteLine("Training Data Set");
-                Console.WriteLine("-----------------");
                 var trainModel = await TrainAsync(trainingDataFile, modelPath);
 
                 Console.WriteLine();
-                Console.WriteLine("Evaluating Training Results");
-                Console.WriteLine("---------------------------");
+                Console.WriteLine("Evaluating Training");
                 Evaluate(trainModel, testDataFile);
 
                 var predictModel = await PredictAsync(modelPath, classNames, predictClassData);
@@ -63,8 +60,7 @@ namespace SpamAnalysis
 
                     predictModel = await PredictAsync(modelPath, classNames, predictInputClass, predictModel);
                 }
-
-                Console.WriteLine("Press any key to end program...");
+                
                 Console.ReadKey();
 
             }).GetAwaiter().GetResult();
@@ -72,47 +68,28 @@ namespace SpamAnalysis
 
         internal static async Task<PredictionModel<ClassificationData, ClassPrediction>>TrainAsync(string trainingDataFile, string modelPath)
         {
-            // LearningPipeline allows you to add steps in order to keep everything together 
-            // during the learning process.  
             var pipeline = new LearningPipeline();
-
-            // The TextLoader loads a dataset with a class label and a corresponding text. 
-            // When you create a loader, you specify the schema by passing a class to the loader containing
-            // all the column names and their types. This is used to create the model, and train it. 
+            //load data
             pipeline.Add(new TextLoader(trainingDataFile).CreateFrom<ClassificationData>());
 
-            // TextFeaturizer is a transform that is used to featurize an input column. 
-            // This is used to format and clean the data.
+
             pipeline.Add(new TextFeaturizer("Features", "Text"));
 
-            // Adds a FastTreeBinaryClassifier, the decision tree learner for this project, and 
-            // three hyperparameters to be used for tuning decision tree performance.
             //pipeline.Add(new FastTreeBinaryClassifier() { NumLeaves = 5, NumTrees = 5, MinDocumentsInLeafs = 2 });
+            //pipeline.Add(new FastTreeBinaryClassifier());
             pipeline.Add(new StochasticGradientDescentBinaryClassifier());
 
-            // Train the pipeline based on the dataset that has been loaded, transformed.
+            // Train the pipeline
             PredictionModel<ClassificationData, ClassPrediction> model = pipeline.Train<ClassificationData, ClassPrediction>();
-
-            // Saves the model we trained to a zip file.
+            
             await model.WriteAsync(modelPath);
-
-            // Returns the model we trained to use for evaluation.
             return model;
         }
 
         internal static void Evaluate(PredictionModel<ClassificationData, ClassPrediction> model, string testDatafile)
         {
-            // loads the new test dataset with the same schema.
-            // You can evaluate the model using this dataset as a quality check.
-
             var testData = new TextLoader(testDatafile).CreateFrom<ClassificationData>();
-
-            // Computes the quality metrics for the PredictionModel using the specified dataset.
             var evaluator = new BinaryClassificationEvaluator();
-
-            // The BinaryClassificationMetrics contains the overall metrics computed by binary
-            // classification evaluators. To display these to determine the quality of the model,
-            // you need to get the metrics first.
             BinaryClassificationMetrics metrics = evaluator.Evaluate(model, testData);
 
             // Displaying the metrics for model validation
@@ -131,7 +108,7 @@ namespace SpamAnalysis
                 model = await PredictionModel.ReadAsync<ClassificationData, ClassPrediction>(modelPath);
             }
 
-            if (predicts == null) // do we have input to predict a result?
+            if (predicts == null) 
                 return model;
 
             // Use the model to predict the class of the data.
@@ -139,9 +116,7 @@ namespace SpamAnalysis
 
             Console.WriteLine();
             Console.WriteLine("Classification Predictions");
-            Console.WriteLine("--------------------------");
-
-            // Builds pairs of (input, prediction)
+            
             IEnumerable<(ClassificationData input, ClassPrediction prediction)> inputsAndPredictions =
                 predicts.Zip(predictions, (input, prediction) => (input, prediction));
 
